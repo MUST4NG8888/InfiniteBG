@@ -1,0 +1,39 @@
+#container {
+    margin-top: 80px;
+    width: 100%;
+}
+
+#box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+    border-radius: 35px;
+}
+
+
+#sliderContainer{
+    z-index: 0;
+    display: flex;
+    justify-content: center;
+    height: 500px;
+    overflow-y: unset;
+    padding: 20px;
+}
+
+#slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#title {
+    font-size: 80px;
+    font-style: italic;
+    background: linear-gradient(45deg,#FFBB0C, #FF002E);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    width: 550px;
+}
+
+.swiper-button-next { color: red; }

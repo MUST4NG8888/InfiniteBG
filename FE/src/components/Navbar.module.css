@@ -1,0 +1,60 @@
+.container {
+  position: relative;
+  z-index: 1;
+  position: sticky;
+  transition: 0.3s ease-in-out;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 60px 0 60px;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(252, 252, 252, 1));
+  backdrop-filter: blur(20px);
+  /* -webkit-mask: linear-gradient(0deg, rgba(0, 0, 0, 0.636) 20%, black); */
+  box-shadow: 0px 4px 35px rgba(0, 0, 0, 0.04);
+  height: 100px;
+}
+
+#logo {
+  position: relative;
+  height: 32px;
+}
+
+.hide {
+  top: -150px;
+  transition-delay: 0.8s;
+}
+
+.show {
+  top: 0px;
+}
+
+#login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-family: Helvetica, sans-serif;
+  font-weight: bold;
+  text-decoration: none;
+  color: blue;
+  padding: 10px;
+  border: 3px solid blue;
+  border-radius: 80px;
+  transition: 0.2s ease-out;
+}
+
+#google {
+  width: 20px;
+  height: auto;
+}
+
+#login:hover {
+  color: whitesmoke;
+  background: linear-gradient(45deg, rgb(68, 68, 255), rgb(68, 115, 255));
+  border: 3px solid rgb(68, 68, 255);
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.127);
+  transform: scale(1.05);
+}

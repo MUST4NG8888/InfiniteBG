@@ -1,0 +1,76 @@
+import useRXjs from "../hooks/useRXjs";
+import { $user, logout } from "../states/user";
+import { ReactComponent as MiniLogo } from "../assets/icons/MiniLogo.svg";
+import { ReactComponent as Logout } from "../assets/icons/Logout.svg";
+import { NavLink } from "react-router-dom";
+import styles from "./SideMenu.module.css";
+import { useLottie } from "lottie-react";
+import hamburger from "../assets/icons/menuV3.json";
+import React, { useState, useRef } from "react";
+import { CSSTransition } from "react-transition-group";
+import "./SideMenuAnimation.css";
+
+const SideMenu = () => {
+  const [isOpened, setIsOpened] = useState(false);
+  const nodeRef = useRef(null);
+  const { View, play, setDirection } = useLottie(
+    {
+      animationData: hamburger,
+      loop: false,
+      autoplay: false,
+    },
+    { width: "40px" }
+  );
+
+  const onHover = () => {
+    setIsOpened(true);
+    setDirection(1);
+    play();
+  };
+
+  const onOut = () => {
+    setIsOpened(false);
+    setDirection(-1);
+    play();
+  };
+
+  const user = useRXjs($user);
+  return (
+    <>
+      <CSSTransition
+        in={isOpened}
+        nodeRef={nodeRef}
+        timeout={300}
+        classNames="sidemenu"
+        unmountOnExit
+      >
+        <div id={styles.container} ref={nodeRef} onMouseLeave={onOut}>
+          <div id={styles.linkContainer}>
+            <div></div>
+            <NavLink to="events">Events</NavLink>
+            <NavLink to="plays">Games</NavLink>
+            <NavLink to="plays">Disqus</NavLink>
+          </div>
+          {user ? (
+            <Logout onClick={logout} id={styles.logout} />
+          ) : (
+            <MiniLogo id={styles.sidelogomini} />
+          )}
+        </div>
+      </CSSTransition>
+      {user ? (
+        <NavLink to="profile">
+          <div id={styles.avatarContainer} onMouseEnter={onHover}>
+            <img id={styles.avatar} src={user.avatar} alt="" />
+          </div>
+        </NavLink>
+      ) : (
+        <div id={styles.hamburger} onMouseEnter={onHover}>
+          {View}
+        </div>
+      )}
+    </>
+  );
+};
+
+export default SideMenu;

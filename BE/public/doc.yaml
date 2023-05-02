@@ -1,0 +1,1244 @@
+openapi: 3.0.3
+info:
+  version: "0.5"
+  title: Infinite BGG Project
+  description: |-
+    This is the REST API of the Infinite BGG Project
+  termsOfService: /terms
+  contact:
+    email: hello@infinite.games
+servers:
+  - url: https://infinite.games
+tags:
+  - name: games
+    description: Get boardgames data from BoardGameGeek XML API
+    externalDocs:
+      description: Find out more
+      url: https://boardgamegeek.com/wiki/page/BGG_XML_API2
+  - name: events
+    description: Create, Add, Update, Delete and Get info about events
+  - name: ratings
+    description: Create, Add, Update, Delete and Get info about your boardgame ratings and reviews
+  - name: friends
+    description: Create, Add, Update, Delete and Get info about the user's friends
+  - name: users
+    description: GET and Update the user data 
+  - name: vaults
+    description: Create, Add, Update, Delete and Get info about the user's boardgame collection
+  - name: plays
+    description: Create, Add, Update, Delete and Get info about users's plays
+  - name: login
+    description: User Google sign in 
+paths:
+  /login:
+    post:
+      tags:
+        - login
+      summary: Logs in a user using Google single sign on.
+      description: Logs in a user using Google single sign on.
+      operationId: userLogin
+      requestBody:
+        description: Contains the code from Google's authorization server
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '400':
+          description: Bad request
+  /rating/game/{id}:
+    get:
+      tags: 
+        - ratings
+      summary: Get all rating of a boardgame
+      description: Get rating of a boardgame
+      operationId: getGameRatings
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The Game ID
+      responses:
+        '200':
+          description: Successful operation. An array of objects is returned.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rating'  
+        '404':
+          description: "Nothing to be found!"
+  /rating/{id}:
+    get:
+      tags: 
+        - ratings
+      summary: Get all rating of a user
+      description: Get all rating of a user
+      operationId: getUsersRatings
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The user ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation. An array of objects is returned.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      example:  "MongoDB ObjectID object"
+                    userId:
+                      type: string
+                      example: "User MongoDB ObjectID object"
+                    gameId:
+                      type: number
+                      example: 271568
+                    rating:
+                      type: number
+                      example: "USER RATING of the game"
+                    reviewTitle:
+                      type: string
+                      example: "TEST REVIEW TITLE"
+                    review:
+                      type: string
+                      example: "TEST REVIEW"
+                    gameTitle:
+                        type: string
+                        example: Brass Birmingham
+                    gameImage:
+                        type: string
+                        example: https://cf.geekdo-images.com/x3zxjr-Vw5iU4yDPg70Jgw__original/img/FpyxH41Y6_ROoePAilPNEhXnzO8=/0x0/filters:format(jpeg)/pic3490053.jpg
+                    gameDesc:
+                        type: string
+                        example: Numero Uno BoardGame of the World
+        '401':
+          description: "Unauthorized"
+        '403':
+          description: "Good try, mate!"
+        '404':
+          description: "Nothing to be found!"
+    delete:
+      tags: 
+        - ratings
+      summary: Delete the user rating for a game
+      description: Delete the user rating for a game
+      operationId: deleteGameRating
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The game ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Rating has been deleted!
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Rating has been deleted!
+        '401':
+          description: "Unauthorized"
+        '404':
+          description: "No rating has been deleted!"
+  /rating/:
+    post:
+      tags: 
+        - ratings
+      summary: Make a new rating for a game
+      description: Make a new rating for a game
+      operationId: makeGameRating
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates a user rating for a game
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rating'
+        required: true
+      responses:
+        '200':
+          description: "The ratings has been saved!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: The ratings has been saved!
+        '400':
+          description: "You already reviewed this game"       
+        '401':
+          description: "Unauthorized"
+        '403':
+          description: "Good try, mate!"
+    put:
+      tags: 
+        - ratings
+      summary: Update a rating for a game
+      description: Update a rating for a game
+      operationId: updateGameRating
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Updated rating data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rating'
+        required: true
+      responses:
+        '200':
+          description: "The ratings has been updated!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The ratings has been updated!"     
+        '401':
+          description: "Unauthorized"
+        '404':
+          description: "No rating found!"
+  /plays/{id}:
+    get:
+      tags: 
+        - plays
+      summary: Get all the plays of the user
+      description: Get all the plays of the user
+      operationId: getUserPlays
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The User ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation. An array of objects is returned.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Play'
+        '400':
+          description: "No plays found!"
+        '401':
+          description: "Unauthorized"
+        '404':
+          description: "Nothing to be found!"
+    delete:
+      tags: 
+        - plays
+      summary: Delete the selected play of the user
+      description: Delete the selected play of the user
+      operationId: deleteUserPlays
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The play ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: "Play has been deleted!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Play has been deleted!"
+        '400':
+          description: "No play has been deleted!"
+        '401':
+          description: "Unauthorized"
+        '404':
+          description: "No rating has been deleted!"
+    put:
+      tags: 
+        - plays
+      summary: Update the selected play of the user
+      description: Update the selected play of the user
+      operationId: updateUserPlays
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The play ID
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates a preferences for a logged in user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Play'
+        required: true
+      responses:
+        '200':
+          description: Successful operation. An object returned with a string.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Play'
+        '401':
+          description: "Unauthorized"
+        '404':
+          description: "No rating found!"
+  /plays/:
+    get:
+      tags: 
+        - plays
+      summary: Get all the plays from the db
+      description: Get all the plays from the db
+      operationId: getPlays
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation. An array of objects is returned.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Play'
+        '400':
+          description: "Nothing to be found!"      
+        '401':
+          description: "Unathorized"
+    post:
+      tags: 
+        - plays
+      summary: Make a new play for the user
+      description: Make a new play for the user
+      operationId: makeNewPlay
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Creates a new play for the user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Play'
+        required: true
+      responses:
+        '200':
+          description: "The play has been created!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The play has been created!"
+        '400':
+          description: "Play can't be created!"      
+        '401':
+          description: "Unauthorized"
+  /vaults/{id}:
+    get:
+      tags: 
+        - vaults
+      summary: Get the BG collection of a user
+      description: Get the BG collection of a user
+      operationId: getUserVaults
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The user ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation. An object is returned.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vault'
+        '400':
+          description: " Nice try, mate!"
+        '401':
+          description: "Unauthorized"
+    delete:
+      tags: 
+        - vaults
+      summary: Delete a game from the user's collection 
+      description: Delete a game from the user's collection 
+      operationId: deletefromUserVault
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The game ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: "Game has been deleted from your collection!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Game has been deleted from your collection!"
+
+        '400':
+          description: "You don't have any collection to delete games from!"
+        '401':
+          description: "Unauthorized"
+  /vaults/:
+    post:
+      tags: 
+        - vaults
+      summary: Add or move a game from collection to collection
+      description: Add or move a game from collection to collection
+      operationId: addOrMoveToVault
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Create a new or update the Vault of the user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Play'
+        required: true
+      responses:
+        '200':
+          description: Game has been added to your collection!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Game has been added to your collection!"     
+        '401':
+          description: "Unauthorized"
+        '403':
+          description: "Good try, mate!"
+  /friends/{id}:
+    get:
+      tags: 
+        - friends
+      summary: Get all of the friends of the user
+      description: Get all of the friends of the user
+      operationId: getUserFriends
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The user ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation. An objects is returned.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: "Something went wrong!"
+        '401':
+          description: "Unauthorized"
+    delete:
+      tags: 
+        - friends
+      summary: Delete a friend from your friendzone
+      description: Delete a friend from your friendzone
+      operationId: deleteUserFriend
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The user ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: "The user has been removed from your connections!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The user has been removed from your connections!"
+        '400':
+          description: "Something went wrong!"
+        '401':
+          description: "Unauthorized"
+  /friends/:
+    post:
+      tags: 
+        - friends
+      summary: Send a friend request to a user
+      description: Send a friend request to a user
+      operationId: MakeNewConnection
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Make connection to a user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: "6438548b6bccec38e3ebde36"
+        required: true
+      responses:
+        '200':
+          description: "Friend request has been sent!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Friend request has been sent!"
+        '400':
+          description: "You are already in connection!"      
+        '401':
+          description: "Unauthorized"
+  /friends/accept/{id}:
+    get:
+      tags: 
+        - friends
+      summary: Accept the friend request
+      description: Accept the friend request
+      operationId: acceptUserConnection
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The friend ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: "Friend request has been accepted!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Friend request has been accepted!"
+        '400':
+          description: "Something went wrong!"
+        '401':
+          description: "Unauthorized"
+  /users/:
+    get:
+      tags: 
+        - users
+      summary: Get the user's data
+      description: Get the user's data
+      operationId: getUserData
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation. An objects is returned.
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/User'
+          
+        '400':
+          description: "Nothing to be found!"
+        '401':
+          description: "Unauthorized"
+  
+    put:
+      tags: 
+        - users
+      summary: Update the user's data
+      description: Update the user's data
+      operationId: updateUserData
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Update user data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: Successful operation. An object returned.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: The ratings has been saved!     
+        '400':
+          description: "Something went wrong!"
+        '401':
+          description: "Unauthorized"
+  /users/search:
+    get:
+      tags: 
+        - users
+      summary: Get users by search terms /// Search by name, username, e-mail
+      description: Get users by search terms /// Search by name, username, e-mail
+      operationId: getUserDataBySearch
+      parameters:
+        - in: query
+          name: term   # SearchTerm in the  QUERY PARAMS
+          required: true
+          schema:
+            type: string
+          description: Search users by Name, UserName or email
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation. An array of objects is returned.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: "No user found!"
+        '401':
+          description: "Unauthorized"
+  /events/invite/{id}:
+    post:
+      tags: 
+        - events
+      summary: Admin / Creators can invite users to the event
+      description: Admin / Creators can invite users to the event
+      operationId: inviteUserToEvent
+      requestBody:
+        description: Invite dUser ID
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userName
+              properties:
+                id:
+                  type: string
+                  example: "6438548b6bccec38e3ebde36"
+        required: true
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The Event ID
+      responses:
+        '200':
+          description: "Successfuly invited the user!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Successfuly invited the user!"         
+        '400':
+          description: "You are not authorized to do that!"
+        '401':
+          description: "Unauthorized"
+  /events/join/{id}:
+    post:
+      tags: 
+        - events
+      summary: Join the event
+      description: Join the event
+      operationId: joinEvents
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The Event ID
+      requestBody:
+        description: The user can join to an event and accept the invite at the same time.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: 
+                chosen:
+                  type: string
+                  example: going
+        required: true
+      responses:
+        '200':
+          description: "Successfuly joined!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Successfuly joined!"
+        '400':
+          description: Something went wrong!"
+        '401':
+          description: "Unauthorized"
+  /events/{id}:
+    get:
+      tags: 
+        - events
+      summary: Get all of the  events of the user
+      description: Get all of the events of the user
+      operationId: getUserEvents
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The user ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: You
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          description: "No events were found!"
+        '401':
+          description: "Unauthorized"
+    delete:
+      tags: 
+        - events
+      summary: Delete the event from db and from User's events
+      description: Delete the event from db from User's events
+      operationId: deleteEvents
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The event ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: "Event has been deleted!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Event has been deleted!"
+        '400':
+          description: "No event has been deleted!"
+        '401':
+          description: "Unauthorized"
+    put:
+      tags: 
+        - events
+      summary: Update the data of an event
+      description: Update the data of an event
+      operationId: updateEventsDetails
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The user ID
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Update event data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+        required: true
+      responses:
+        '200':
+          description: Successful operation. An object returned with the updated data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'    
+        '400':
+          description: "No events found!"
+        '401':
+          description: "Unauthorized"
+  /events/:
+    post:
+      tags: 
+        - events
+      summary: Make a new event
+      description: Make a new event
+      operationId: createEvents
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Create an event
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+        required: true
+      responses:
+        '200':
+          description: "The event has been created!"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: " The event has been created!"
+        '400':
+          description: "Event can't be created!"      
+        '401':
+          description: "Unauthorized"
+    get:
+      tags: 
+        - events
+      summary: Get all public event
+      description: Get all public event
+      operationId: getPublicEvents
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation. An array of objects is returned.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          description: "No events found!"
+        '401':
+          description: "Unauthorized"                  
+  /games/{id}:
+    get:
+      tags: 
+        - games
+      summary: Get all the data of a boardgame from BGG API
+      description: Get all the data of a boardgame from BGG API
+      operationId: getGameData
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The boardgame ID
+      responses:
+        '200':
+          description: Successful operation. An array of objects is returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gameTitle:
+                    type: string
+                    example: Brass Birmingham
+                  gameImage:
+                    type: string
+                    example: https://cf.geekdo-images.com/x3zxjr-Vw5iU4yDPg70Jgw__original/img/FpyxH41Y6_ROoePAilPNEhXnzO8=/0x0/filters:format(jpeg)/pic3490053.jpg
+                  gameDesc:
+                    type: string
+                    example: Numero Uno BoardGame of the World
+        '401':
+          description: "Unauthorized"
+        '400':
+          description: "Better luck next time! There is no match, whatsoever!"
+  /games/search:
+    get:
+      tags: 
+        - games
+      summary: Get boardgame data by search from BGG API /// You can search by name
+      description: Get boardgame data by search from BGG API /// You can search by name
+      operationId: getGamesDataBySearch
+      parameters:
+        - in: query
+          name: term   # SearchTerm in the  QUERY PARAMS
+          required: true
+          schema:
+            type: string
+          description: The user Name or UserName or email
+      responses:
+        '200':
+          description: Successful operation. An array of objects is returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gameTitle:
+                    type: string
+                    example: Brass Birmingham
+                  gameImage:
+                    type: string
+                    example: https://cf.geekdo-images.com/x3zxjr-Vw5iU4yDPg70Jgw__original/img/FpyxH41Y6_ROoePAilPNEhXnzO8=/0x0/filters:format(jpeg)/pic3490053.jpg
+                  gameDesc:
+                    type: string
+                    example: Numero Uno BoardGame of the World
+        '401':
+          description: "Unauthorized"
+        '400':
+          description: "Better luck next time! There is no match, whatsoever!"
+  /games/hot:
+    get:
+      tags: 
+        - games
+      summary: Get the data about the top 50 of the hottest boardgame from BGG API
+      description: Get the data about the top 50 of the hottest boardgame from BGG API
+      operationId: getHotGames
+      responses:
+        '200':
+          description: Successful operation. An array of objects is returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gameTitle:
+                    type: string
+                    example: Brass Birmingham
+                  gameImage:
+                    type: string
+                    example: https://cf.geekdo-images.com/x3zxjr-Vw5iU4yDPg70Jgw__original/img/FpyxH41Y6_ROoePAilPNEhXnzO8=/0x0/filters:format(jpeg)/pic3490053.jpg
+                  gameDesc:
+                    type: string
+                    example: Numero Uno BoardGame of the World
+        '401':
+          description: "Unauthorized"
+        '400':
+          description: "Better luck next time! There is no match, whatsoever!"
+  /games/:
+    post:
+      tags: 
+        - games
+      summary: Get all of the data about the selected boardgames from the BGG API
+      description: Get all of the data about the selected boardgames from the BGG API
+      operationId: getTworMoreGamesData
+      requestBody:
+        description: Get Two or more games detailed data from BGG API
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Game'
+        required: true
+      responses:
+        '200':
+          description: Successful operation. An array of objects is returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gameTitle:
+                    type: string
+                    example: Brass Birmingham
+                  gameImage:
+                    type: string
+                    example: https://cf.geekdo-images.com/x3zxjr-Vw5iU4yDPg70Jgw__original/img/FpyxH41Y6_ROoePAilPNEhXnzO8=/0x0/filters:format(jpeg)/pic3490053.jpg
+                  gameDesc:
+                    type: string
+                    example: Numero Uno BoardGame of the World
+        '401':
+          description: "Unauthorized"
+        '400':
+          description: "Better luck next time! There is no match, whatsoever!"
+
+
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        startData:
+          type: string
+          format: date
+          example: "2023-04-09T11:25:11.320+00:00"
+        endDate:
+          type: string
+          format: date
+          example: "2023-04-09T11:25:11.320+00:00"
+        title: 
+          type: string
+          example: Best Of Boardgaming Event of 2023!
+        summary:
+          type: string
+          example: Something exemplary
+        description:
+          type: string
+          example: "Something Something"
+        location: 
+          type: string
+          example: Budapest
+        public:
+          type: boolean
+          example: true
+        creator:
+          type: array
+          items:
+            type: string
+            example: User ObjectID
+        admin:
+          type: array
+          items:
+            type: string
+            example: User ObjectID
+        invited:
+          type: array
+          items:
+            type: string
+            example: User ObjectID
+        interested:
+          type: array
+          items:
+            type: string
+            example: User ObjectID
+        going:
+          type: array
+          items:
+            type: string
+            example: User ObjectID
+    Play:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: "2023-04-09T11:25:11.320+00:00"
+        gameTitle:
+          type: string
+          example: Brass Birmingham
+        gameId: 
+          type: number
+          example: 27189
+        playerNumber:
+          type: number
+          example: 4
+        players: 
+          type: array
+          items: 
+            type: object
+            properties:
+              name:
+                type: string
+                example: Andrew
+              userId:
+                type: string
+                example: User ObjectId
+              points:
+                type: number
+                example: 172
+              colour: 
+                type: string
+                example: red
+              position:
+                type: number
+                example: 1
+        title: 
+          type: string
+          example: Brass Gaming Session Vol. 2
+        description:
+          type: string
+          example: Very few people appreciate the depths of this game, but even fewer can master it!
+        locastion:
+          type: string
+          example: BDPST
+    Rating:
+      type: object
+      properties:
+        ratedBy:
+          type: string
+          example: User ObjectId
+        gameId:
+          type: number
+          example: 271892
+        rating:
+          type: number
+          example: 8
+        reviewTitle:
+          type: string
+          example: NerdyNerd review of this fantastic game in a couple of words!
+        review:
+          type: string
+          example: This is a very good boardgame!
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          example: Mr. X
+        password:
+          type: string
+          example: sa12144saR4%/ZHD4S!+!%655646!!!%%65487DSAG4?LPKÖ("4"32)
+        avatar:
+          type: string
+          example: https://cdn.openart.ai/stable_diffusion/4cab2ba8b291f2858cc2673d0291a36b61c1ff8b_2000x2000.webp
+        subs:
+          type: array
+          items:
+            type: string
+          example: [12134567878999]
+        email:
+          type: string
+          example: mrxduckdogers@duffyduck.gov
+        accessToken:
+          type: string
+          example: _access_token_here
+        profile:
+          type: object
+          properties: 
+            name:
+              type: string
+              example: Jesse James
+            firstName:
+              type: string
+              example: Jesse
+            lastName:
+              type: string
+              example: James
+            bio:
+              type: string
+              example: Love DuckSauce
+            dateofbirth:
+              type: number
+              example: 982
+        role:
+          type: string
+          example: user
+        friendzone:
+          type: object
+          properties:
+            friends: 
+              type: array
+              items: 
+                  type: number
+                  example: ['123456879999']
+            invited: 
+              type: array
+              items: 
+                type: number
+                example: ['888813254656']
+        plays:
+          type: string
+          example: ObjectId
+        vault:
+          type: string
+          example: ObjectId
+        active:
+          type: boolean
+          example: true
+    Vault:
+      type: object
+      properties:
+        favourites:
+          type: array
+          items: 
+              type: number
+              example: 27152
+        whisList:
+          type: array
+          items:
+            type: number
+            example: 27152
+        owned:
+          type: array
+          items: 
+            type: number
+            example: 27152
+        wantToBuy:
+          type: array
+          items: 
+            type: number
+            example: 27152
+        wanToPlay:
+          type: array
+          items:
+            type: number
+            example: 27152
+        forTrade:
+          type: array
+          items: 
+            type: number
+            example: 27152
+    Game:
+      type: object
+      properties:
+        ids:
+          type: array
+          items: 
+              type: number
+              example: [366013,342942,233078,350184]
+  securitySchemes:
+    bearerAuth:            
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
