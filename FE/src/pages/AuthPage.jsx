@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../states/user";
+import InfinityLoading from "../assets/icons/infinityLoading";
+import styles from "./AuthPage.module.css"
 
 const AuthPage = () => {
   const navigate = useNavigate()
@@ -14,7 +16,7 @@ const AuthPage = () => {
     });
   }, [])
 
-  return <h1>GOOGLE AUTH</h1>;
+  return <div id={styles.container}><InfinityLoading/></div>
 };
 
 export default AuthPage;

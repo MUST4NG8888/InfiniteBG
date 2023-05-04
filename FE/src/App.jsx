@@ -1,14 +1,21 @@
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { Outlet } from "react-router-dom";
-import "./App.css"
+import ScrollToTop from "./components/ScrollToTop";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
+
+import "./App.css";
 
 function App() {
   return (
     <>
-      <Navbar />
-      <Outlet />
-      <Footer />
+      <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale="hu-en">
+        <ScrollToTop />
+        <Navbar />
+        <Outlet />
+        <Footer />
+      </LocalizationProvider>
     </>
   );
 }

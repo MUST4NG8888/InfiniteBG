@@ -12,6 +12,8 @@ import Plays from "./pages/Plays";
 import Events from "./pages/Events";
 import GamePage from "./pages/GamePage";
 import { getGameData } from "./pages/GamePage";
+import '@smastrom/react-rating/style.css'
+
 
 
 const router = createBrowserRouter([

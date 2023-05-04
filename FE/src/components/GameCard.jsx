@@ -6,16 +6,10 @@ const GameCard = ({ game, index }) => {
 
   const color = () => {
     if (rating >= 80) return "#4771DC";
-    if (rating >= 65) return "#3EEA02";
+    if (rating >= 70) return "#3EEA02";
+    if (rating >= 60) return "rgb(255, 175, 2)";
     if (rating >= 40) return "orangered";
     if (rating > 0) return "red";
-  };
-
-  const colorGradient = () => {
-    if (rating > 80) return ["#4771DC", "#621080"];
-    if (rating >= 65) return ["#40F800", "#47DCD3"];
-    if (rating >= 40) return ["orangered"];
-    if (rating > 0) return ["red"];
   };
 
   const props = {
@@ -23,7 +17,6 @@ const GameCard = ({ game, index }) => {
     size: 70,
     speed: 300,
     colorSlice: color(),
-    // linearGradient:  colorGradient(),
     unit: "",
     round: true,
     fontColor: color(),

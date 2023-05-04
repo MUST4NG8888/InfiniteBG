@@ -73,6 +73,7 @@ router.post(
       user.vault,
       {
         $pull: {
+          favourites: gameId,
           owned: gameId,
           forTrade: gameId,
           wantToBuy: gameId,
@@ -110,6 +111,7 @@ router.delete(
       user.vault,
       {
         $pull: {
+          favourites: gameId,
           owned: gameId,
           forTrade: gameId,
           wantToBuy: gameId,

@@ -8,10 +8,10 @@ import { Play, type PlayType } from "../model/Play";
 const router = express.Router();
 
 const PlaysSchema = z.object({
-  date: z.coerce.date(),
+  date: z.string(),
   gameTitle: z.string(),
   gameId: z.number(),
-  playerNumber: z.number(),
+  playerNumber: z.number().optional(),
   players: z.array(
     z.object({
       name: z.string(),
