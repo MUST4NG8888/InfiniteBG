@@ -36,7 +36,7 @@ const ModalCollection = ({
         sx={{
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: "start",
           backdropFilter: "blur(17px)",
           padding: "120px",
         }}

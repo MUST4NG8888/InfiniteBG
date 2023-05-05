@@ -1,6 +1,6 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useRXjs from "../hooks/useRXjs";
-import { $user, logout } from "../states/user";
+import { $user } from "../states/user";
 import { ReactComponent as Logo } from "../assets/logo.svg";
 import { ReactComponent as Google } from "../assets/icons/Google__G.svg";
 import styles from "../components/Navbar.module.css";

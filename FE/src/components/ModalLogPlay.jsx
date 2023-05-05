@@ -36,10 +36,11 @@ const ModalLogPlay = ({ openModal, setOpenModal, gameData }) => {
     <>
       <Modal
         sx={{
+          overflow: "scroll",
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
-          backdropFilter: "blur(17px)",
+          alignItems: "start",
+          // backdropFilter: "blur(17px)",
           padding: "120px",
         }}
         open={openModal}

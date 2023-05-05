@@ -1,6 +1,13 @@
 import { useState } from "react";
 import styles from "./LogForm.module.css";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import AddUser from "../assets/icons/AddUser.jsx";
+import DeleteUser from "../assets/icons/DeleteUser";
 import { DateTime } from "luxon";
 
 const LogForm = ({ submitHandler, gameData }) => {
@@ -14,6 +21,8 @@ const LogForm = ({ submitHandler, gameData }) => {
     title: "",
     location: "",
   });
+
+
   const handleFormChange = (index, event) => {
     let data = [...inputFields];
     if (event.target.name === "position" || event.target.name === "points") {
@@ -29,13 +38,12 @@ const LogForm = ({ submitHandler, gameData }) => {
     setInputFields([...inputFields, newfield]);
   };
 
-  const submit = (e) => {
-    e.preventDefault();
+  const submit = () => {
     setPlay(Object.assign(play, { players: inputFields }));
     submitHandler(play);
   };
 
-  const removeFields = (index) => {
+  const removeFields = ( index) => {
     let data = [...inputFields];
     data.splice(index, 1);
     setInputFields(data);
@@ -48,70 +56,237 @@ const LogForm = ({ submitHandler, gameData }) => {
         value={dateTime}
         maxDate={DateTime.now()}
         onChange={(newValue) => {
-          console.log(newValue.toISO());
           setPlay({ ...play, date: newValue.toISO() });
         }}
-        size="small"
       />
-      <div>
-        <input
-          name="title"
-          placeholder="Title"
+      <div style={{ display: "flex", gap: "20px", marginTop: "20px" }}>
+        <TextField
+          id="standard-basic"
+          label="Title"
+          variant="standard"
           value={play.title}
           onChange={(newValue) =>
             setPlay({ ...play, title: newValue.target.value })
           }
         />
-        <input
-          name="location"
-          placeholder="Location"
+        <TextField
+          id="standard-basic"
+          label="Location"
+          variant="standard"
           value={play.location}
           onChange={(newValue) =>
             setPlay({ ...play, location: newValue.target.value })
           }
         />
       </div>
-      <form onSubmit={submit}>
+      <div>
         {inputFields.map((input, index) => {
           return (
             <div className={styles.playerContainer} key={index}>
               <h2>{index + 1}</h2>
-              <input
-                name="name"
-                placeholder="Name"
-                value={input.name}
-                onChange={(event) => handleFormChange(index, event)}
-              />
-              <input
-                name="colour"
-                placeholder="Color"
-                value={input.colour}
-                onChange={(event) => handleFormChange(index, event)}
-              />
-              <input
-                name="points"
-                placeholder="Points"
-                type="number"
-                value={input.points}
-                onChange={(event) => handleFormChange(index, event)}
-              />
-              <input
-                name="position"
-                placeholder="Position"
-                type="number"
-                value={input.position}
-                onChange={(event) => {
-                  console.log(event.target.value);
-                  handleFormChange(index, event);
-                }}
-              />
-
-              <button onClick={() => removeFields(index)}>Remove</button>
+              <div className={styles.inputContainer}>
+                <TextField
+                  size="medium"
+                  name="name"
+                  label="Name"
+                  variant="standard"
+                  value={input.name}
+                  onChange={(event) => handleFormChange(index, event)}
+                />
+                <FormControl variant="standard" sx={{ width: "120px" }}>
+                  <InputLabel id="demo-simple-select-label">Color</InputLabel>
+                  <Select
+                    name="colour"
+                    labelId="demo-simple-select-label"
+                    value={input.colour}
+                    label="Color"
+                    onChange={(event) => handleFormChange(index, event)}
+                  >
+                    <MenuItem value={"red"}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "17px",
+                            height: "17px",
+                            borderRadius: "50%",
+                            backgroundColor: "red",
+                          }}
+                        />
+                        Red
+                      </div>
+                    </MenuItem>
+                    <MenuItem value={"green"}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "17px",
+                            height: "17px",
+                            borderRadius: "50%",
+                            backgroundColor: "green",
+                          }}
+                        />
+                        Green
+                      </div>
+                    </MenuItem>
+                    <MenuItem value={"blue"}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "17px",
+                            height: "17px",
+                            borderRadius: "50%",
+                            backgroundColor: "blue",
+                          }}
+                        />
+                        Blue
+                      </div>
+                    </MenuItem>
+                    <MenuItem value={"purple"}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "17px",
+                            height: "17px",
+                            borderRadius: "50%",
+                            backgroundColor: "purple",
+                          }}
+                        />
+                        Purple
+                      </div>
+                    </MenuItem>
+                    <MenuItem value={"yellow"}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "17px",
+                            height: "17px",
+                            borderRadius: "50%",
+                            backgroundColor: "yellow",
+                          }}
+                        />
+                        Yellow
+                      </div>
+                    </MenuItem>
+                    <MenuItem value={"orange"}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "17px",
+                            height: "17px",
+                            borderRadius: "50%",
+                            backgroundColor: "orange",
+                          }}
+                        />
+                        Orange
+                      </div>
+                    </MenuItem>
+                    <MenuItem value={"black"}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "17px",
+                            height: "17px",
+                            borderRadius: "50%",
+                            backgroundColor: "black",
+                          }}
+                        />
+                        Black
+                      </div>
+                    </MenuItem>
+                    <MenuItem value={"silver"}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "17px",
+                            height: "17px",
+                            borderRadius: "50%",
+                            backgroundColor: "gray",
+                          }}
+                        />
+                        Silver
+                      </div>
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+                <TextField
+                  name="points"
+                  label="Points"
+                  variant="standard"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  type="number"
+                  value={input.points}
+                  onChange={(event) => handleFormChange(index, event)}
+                />
+                <TextField
+                  name="position"
+                  label="Position"
+                  variant="standard"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  type="number"
+                  value={input.position}
+                  onChange={(event) => handleFormChange(index, event)}
+                />
+              </div>
+              <button
+                className={styles.removeButton}
+                onClick={() => removeFields(index)}
+              >
+                X
+              </button>
             </div>
           );
         })}
-      </form>
-      <button onClick={addFields}>Add Player</button>
+      </div>
+
+      <AddUser onClick={addFields} />
       <button id={styles.doneButton} onClick={submit}>
         Submit
       </button>

@@ -1,0 +1,10 @@
+#title {
+    position: relative;
+    left: -130px;
+    font-size: 62px;
+    font-style: italic;
+    background: linear-gradient(45deg,#4771DC, #621080);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    width: 550px;
+}

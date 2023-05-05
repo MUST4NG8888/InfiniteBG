@@ -32,7 +32,7 @@ router.post("/", verify(RatingSchema), verifyToken(), async (req, res) => {
     gameId: rating.gameId,
   });
   if (existRating) {
-    return res.status(400).json("You already reviewed this game");
+    return res.status(400).json("You already reviewed this game!");
   }
   const newRating = await Rating.create<RatingType>(rating);
   res.status(200).json("The ratings has been saved!");
@@ -68,7 +68,7 @@ router.get("/:id", verifyToken(), async (req, res) => {
 
 router.get("/game/:id", async (req, res) => {
   const gameId = req.params.id;
-  const ratings = await Rating.find<RatingType>({ gameId: gameId });
+  const ratings = await Rating.find<RatingType>({ gameId: gameId }).populate("ratedBy");
   if (ratings.length === 0) return res.status(404).json("Nothing to be found!");
   res.status(200).json(ratings);
 });
