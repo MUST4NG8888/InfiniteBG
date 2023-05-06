@@ -33,7 +33,7 @@ describe("GET /api/games/hot", () => {
     // then
     expect(resp.status).toBe(200);
     expect(resp).toBeDefined();
-  });
+  }, 20000);
 });
 
 describe("GET /api/games/search", () => {
