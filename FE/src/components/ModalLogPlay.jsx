@@ -8,7 +8,7 @@ import useRXjs from "../hooks/useRXjs";
 import { $user } from "../states/user";
 import LogForm from "./LogForm.jsx";
 
-const ModalLogPlay = ({ openModal, setOpenModal, gameData }) => {
+const ModalLogPlay = ({ openModal, setOpenModal, gameData, getUserGameLogs  }) => {
   const user = useRXjs($user);
   const [open, setOpen] = useState(false);
   const handleClose = () => {
@@ -29,6 +29,7 @@ const ModalLogPlay = ({ openModal, setOpenModal, gameData }) => {
         },
       }
     );
+    getUserGameLogs(user.id, gameData.id)
     setOpenModal(false), setOpen(true);
   };
 

@@ -1,27 +1,23 @@
 import axios from "axios";
 
-
 const sendCollectionData = async (x, y) => {
-
-    console.log(x)
-if ( x === "none") {
-
+  console.log(x);
+  if (x === "none") {
     const response = await axios.delete(
-        `http://localhost:8080/api/vaults/${y}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      console.log(response.data)
+      `${import.meta.env.VITE_BACKEND_URL}/api/vaults/${y}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    console.log(response.data);
 
-      return response.data
-    };
-
+    return response.data;
+  }
 
   const response = await axios.post(
-    "http://localhost:8080/api/vaults",
+    `${import.meta.env.VITE_BACKEND_URL}/api/vaults`,
     {
       collectionName: x,
       gameId: y,
@@ -33,8 +29,7 @@ if ( x === "none") {
     }
   );
 
-  return response.data
+  return response.data;
 };
 
-
-export default sendCollectionData
+export default sendCollectionData;

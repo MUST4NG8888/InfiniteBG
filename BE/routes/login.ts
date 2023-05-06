@@ -34,6 +34,7 @@ router.post(
   async (req: Request, res: Response) => {
     const loginRequest = req.body as LoginRequest;
     const id_token = await getIdToken(loginRequest.code);
+    console.log(id_token)
     if (!id_token) return res.status(401);
     const payload: unknown = jwt.decode(id_token);
     const result = safeParse(Payload, payload);

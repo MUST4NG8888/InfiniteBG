@@ -12,9 +12,12 @@ import ModalReview from "../components/ModalReview";
 import getUserGameRating from "../utility/getUserGameRating";
 import EmojiRating from "../components/EmojiRating";
 import GamePageReview from "../components/GamePageReview";
+import GamePageLog from "../components/GamePageLog";
 
 export const getGameData = async (id) => {
-  const response = await axios.get(`http://localhost:8080/api/games/${id}`);
+  const response = await axios.get(
+    `${import.meta.env.VITE_BACKEND_URL}/api/games/${id}`
+  );
   return response.data;
 };
 
@@ -24,13 +27,14 @@ const GamePage = () => {
   const [userCollection, setUserCollection] = useState();
   const [openCollection, setOpenCollection] = useState(false);
   const [userRating, setUserRating] = useState();
+  const [userGameLogs, setUserGameLogs] = useState();
   const [openLog, setOpenLog] = useState(false);
   const [reviews, setReviews] = useState(null);
   const [openReview, setOpenReview] = useState(false);
 
   const getGameReviews = async (id) => {
     const response = await axios.get(
-      `http://localhost:8080/api/ratings/game/${id}`,
+      `${import.meta.env.VITE_BACKEND_URL}/api/ratings/game/${id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -38,6 +42,20 @@ const GamePage = () => {
       }
     );
     setReviews(response.data);
+  };
+
+  const getUserGameLogs = async (id, gameId) => {
+    const response = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/api/plays/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    setUserGameLogs(
+      response.data.plays.filter((play) => play.gameId === gameId)
+    );
   };
 
   function onChange(newValue) {
@@ -54,10 +72,10 @@ const GamePage = () => {
 
   useEffect(() => {
     getGameReviews(gameData.id);
+    user && getUserGameLogs(user.id, gameData.id);
     user && getGameInUserCollection(user.id, gameData, setUserCollection);
-    getEmojiRating();
+    user && getEmojiRating();
   }, []);
-
 
   const gameData = data[0];
   const rating = Math.round(gameData.statistics.ratings.average * 10);
@@ -95,13 +113,13 @@ const GamePage = () => {
         openModal={openLog}
         setOpenModal={setOpenLog}
         gameData={gameData}
+        getUserGameLogs={getUserGameLogs}
       />
       {user && (
         <ModalReview
           openModal={openReview}
           setOpenModal={setOpenReview}
           gameData={gameData}
-          user={user}
           getEmojiRating={getEmojiRating}
           getGameReviews={getGameReviews}
         />
@@ -123,7 +141,9 @@ const GamePage = () => {
                   />
                 </div>
                 <div>
-                  <h1 id={styles.gameTitle}>{gameData.name}</h1>
+                  <h1 id={styles.gameTitle}>
+                    {gameData.name.replaceAll("&#039;", "'")}
+                  </h1>
                   <h1 id={styles.year}>{gameData.yearpublished}</h1>
                 </div>
                 {user && (
@@ -180,8 +200,13 @@ const GamePage = () => {
             </div>
           </div>
         </div>
-        <div id={styles.bottomContainer}>
-          <GamePageReview reviews={reviews} />
+        <div
+          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+        >
+          <div id={styles.bottomContainer}>
+            <GamePageLog userlogs={userGameLogs} />
+            <GamePageReview reviews={reviews} />
+          </div>
         </div>
       </div>
     </>

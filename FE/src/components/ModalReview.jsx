@@ -4,15 +4,17 @@ import { Modal } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import Grow from "@mui/material/Grow";
 import axios from "axios";
+import useRXjs from "../hooks/useRXjs";
+import { $user } from "../states/user";
 
 const ModalReview = ({
   openModal,
   setOpenModal,
   gameData,
-  user,
   getEmojiRating,
-  getGameReviews
+  getGameReviews,
 }) => {
+  const user = useRXjs($user);
   const [open, setOpen] = useState(false);
   const [warning, setWarning] = useState(false);
   const [review, setReview] = useState({
@@ -56,7 +58,7 @@ const ModalReview = ({
       });
     if (response.status === 200) setOpen(true);
     getEmojiRating();
-    getGameReviews(gameData.id)
+    getGameReviews(gameData.id);
     setOpenModal(false);
   };
 

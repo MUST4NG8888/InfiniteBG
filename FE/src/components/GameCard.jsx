@@ -35,7 +35,7 @@ const GameCard = ({ game, index }) => {
           <img id={styles.gameCover} src={game.image} alt="" loading="lazy" />
         </div>
         <div id={styles.textContainer}>
-          <h2>{game.name}</h2>
+          <h2>{game.name.replaceAll("&#039;", "'")}</h2>
           <h3>{game.yearpublished}</h3>
         </div>
         <div id={styles.ratingContainer}>

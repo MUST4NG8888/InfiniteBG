@@ -1,5 +1,5 @@
 #container {
-    width: 100%
+    width: 100%;
 }
 
 
@@ -8,7 +8,7 @@
     position: relative;
     font-size: 62px;
     font-style: italic;
-    background: linear-gradient(45deg,#4771DC, #621080);
+    background: linear-gradient(45deg,#47DCD3, #3EEA02);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     width: 550px;

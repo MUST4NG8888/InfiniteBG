@@ -72,8 +72,8 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.get("/:id", verifyToken(), async (req: Request, res: Response) => {
   const userId = res.locals.userId;
-  const plays = await User.find({ _id: userId }, {plays: 1}).populate("plays");
-  if (plays.length === 0) return res.status(400).json("No plays found!");
+  const plays = await User.findOne({ _id: userId }, {plays: 1}).populate("plays");
+  if (!plays) return res.status(400).json("No plays found!");
   res.status(200).json(plays);
 });
 

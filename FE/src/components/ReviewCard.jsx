@@ -1,6 +1,6 @@
-import styles from "./ReviewCards.module.css";
+import styles from "./ReviewCard.module.css";
 
-const ReviewCards = ({ review }) => {
+const ReviewCard = ({ review }) => {
   return (
     <div id={styles.box}>
       <div
@@ -22,4 +22,4 @@ const ReviewCards = ({ review }) => {
   );
 };
 
-export default ReviewCards;
+export default ReviewCard;

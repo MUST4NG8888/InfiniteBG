@@ -3,7 +3,7 @@ import axios from "axios";
 
 const getGameInUserCollection = async (id, gameData, setUserCollection) => {
     const response = await axios.get(
-      `http://localhost:8080/api/vaults/${id}`,
+      `${import.meta.env.VITE_BACKEND_URL}/api/vaults/${id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
