@@ -4,7 +4,7 @@ const GamePageReview = ({ reviews }) => {
   return (
     <div id={styles.container}>
       <h1 id={styles.title}>Reviews</h1>
-      <div>
+      <div style={{ padding: "0 20% 0 20%"}}>
         {reviews &&
           reviews.map((review, index) => (
             <ReviewCard key={index} review={review} />

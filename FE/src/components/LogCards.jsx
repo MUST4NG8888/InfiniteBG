@@ -1,8 +1,6 @@
 import styles from "./LogCards.module.css";
 
 const LogCard = ({ userlog }) => {
-  console.log(userlog);
-
   return (
     <div id={styles.box}>
       <div
@@ -11,19 +9,22 @@ const LogCard = ({ userlog }) => {
           flexDirection: "column",
           alignItems: "center",
         }}
-      ><div id={styles.playerContainer}>
-        {userlog.players.map((player) => {
-          return (
-            <>
-              <h4>{player.position}.</h4>
-              <h4>{player.name}</h4>
-              <h4>{player.points} points</h4>
-            </>
-          );
-        })}
+      >
+        <div id={styles.playerContainer}>
+          {userlog.players
+            .sort((a, b) => a.position - b.position)
+            .map((player) => {
+              return (
+                <>
+                  <h4>{player.position}.</h4>
+                  <h4>{player.name}</h4>
+                  <h4>{player.points} points</h4>
+                </>
+              );
+            })}
         </div>
       </div>
-      <h4>Date: {userlog.date}</h4>
+      <h4>Date: {userlog.date.split("T")[0]}</h4>
     </div>
   );
 };

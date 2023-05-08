@@ -32,12 +32,11 @@ const customStyles = {
   inactiveFillColor: "whitesmoke",
 };
 
-const EmojiRating = ({onChange, userRating }) => {
+const EmojiRating = ( {userRating }) => {
   return (
     <Rating
       style={{ maxWidth: 200 }}
       value={userRating}
-      onChange={onChange}
       transition="zoom"
       itemStyles={customStyles}
       readOnly

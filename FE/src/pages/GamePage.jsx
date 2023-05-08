@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useLoaderData } from "react-router-dom";
 import styles from "./GamePage.module.css";
 import { CircularProgressBar } from "@tomik23/react-circular-progress-bar";
@@ -9,21 +8,18 @@ import ModalAddCollection from "../components/ModalAddCollection";
 import getGameInUserCollection from "../utility/getGameInUserCollection";
 import ModalLogPlay from "../components/ModalLogPlay";
 import ModalReview from "../components/ModalReview";
-import getUserGameRating from "../utility/getUserGameRating";
 import EmojiRating from "../components/EmojiRating";
 import GamePageReview from "../components/GamePageReview";
 import GamePageLog from "../components/GamePageLog";
-
-export const getGameData = async (id) => {
-  const response = await axios.get(
-    `${import.meta.env.VITE_BACKEND_URL}/api/games/${id}`
-  );
-  return response.data;
-};
+import getGameReviews from "../utility/getGameReviews";
+import getUserGameLogs from "../utility/getUserGameLogs";
+import getEmojiRating from "../utility/getEmojiRating";
+import InfinityLoading from "../assets/icons/infinityLoading";
 
 const GamePage = () => {
   const user = useRXjs($user);
-  const data = useLoaderData();
+  const gameData = useLoaderData();
+  const [loading, setLoading] = useState(false);
   const [userCollection, setUserCollection] = useState();
   const [openCollection, setOpenCollection] = useState(false);
   const [userRating, setUserRating] = useState();
@@ -32,52 +28,20 @@ const GamePage = () => {
   const [reviews, setReviews] = useState(null);
   const [openReview, setOpenReview] = useState(false);
 
-  const getGameReviews = async (id) => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/api/ratings/game/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-    setReviews(response.data);
-  };
-
-  const getUserGameLogs = async (id, gameId) => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/api/plays/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-    setUserGameLogs(
-      response.data.plays.filter((play) => play.gameId === gameId)
-    );
-  };
-
-  function onChange(newValue) {
-    setUserRating(newValue);
-  }
-
-  const getEmojiRating = async () => {
-    const userRating = await getUserGameRating(user.id, gameData.id);
-    user && userRating > 0 && setUserRating(1);
-    user && userRating > 2.5 && setUserRating(2);
-    user && userRating > 5.0 && setUserRating(3);
-    user && userRating > 7.5 && setUserRating(4);
+  const dataFetch = async () => {
+    setLoading(true);
+    user && setUserRating(await getEmojiRating(user.id, gameData.id));
+    user && setReviews(await getGameReviews(gameData.id));
+    user && setUserGameLogs(await getUserGameLogs(user.id, gameData.id));
+    user && setUserCollection(await getGameInUserCollection(user.id, gameData));
+    setLoading(false);
   };
 
   useEffect(() => {
-    getGameReviews(gameData.id);
-    user && getUserGameLogs(user.id, gameData.id);
-    user && getGameInUserCollection(user.id, gameData, setUserCollection);
-    user && getEmojiRating();
+    dataFetch();
   }, []);
 
-  const gameData = data[0];
+  
   const rating = Math.round(gameData.statistics.ratings.average * 10);
   const color = () => {
     if (rating >= 80) return "#4771DC";
@@ -103,112 +67,135 @@ const GamePage = () => {
 
   return (
     <>
-      <ModalAddCollection
-        openModal={openCollection}
-        setOpenModal={setOpenCollection}
-        gameData={gameData}
-        userCollection={userCollection}
-      />
-      <ModalLogPlay
-        openModal={openLog}
-        setOpenModal={setOpenLog}
-        gameData={gameData}
-        getUserGameLogs={getUserGameLogs}
-      />
-      {user && (
-        <ModalReview
-          openModal={openReview}
-          setOpenModal={setOpenReview}
-          gameData={gameData}
-          getEmojiRating={getEmojiRating}
-          getGameReviews={getGameReviews}
-        />
+      {loading && (
+        <div
+          style={{
+            background: "rgba(239, 239, 239, 0.7)",
+            width: "100vw",
+            height: "100%",
+            backdropFilter: "blur(17px)",
+            position: "absolute",
+            top: "0",
+            zIndex: "500",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <InfinityLoading />
+        </div>
       )}
-
-      <div id={styles.container}>
-        <div id={styles.coverContainer}>
-          <img id={styles.cover} src={gameData.image} alt="" loading="lazy" />
-          <div id={styles.textBoxBlur}></div>
-          <div id={styles.blur}></div>
-          <div id={styles.dataContainer}>
-            <div id={styles.data}>
-              <div id={styles.leftContainer}>
-                <div id={styles.gameBoxContainer}>
-                  <img
-                    id={styles.gameBox}
-                    src={gameData.image}
-                    alt={gameData.name}
-                  />
-                </div>
-                <div>
-                  <h1 id={styles.gameTitle}>
-                    {gameData.name.replaceAll("&#039;", "'")}
-                  </h1>
-                  <h1 id={styles.year}>{gameData.yearpublished}</h1>
-                </div>
-                {user && (
-                  <div id={styles.ratingBox}>
-                    <EmojiRating userRating={userRating} onChange={onChange} />
+      <>
+        <ModalAddCollection
+          openModal={openCollection}
+          setOpenModal={setOpenCollection}
+          gameData={gameData}
+          userCollection={userCollection}
+        />
+        <ModalLogPlay
+          openModal={openLog}
+          setOpenModal={setOpenLog}
+          gameData={gameData}
+          getUserGameLogs={getUserGameLogs}
+        />
+        {user && (
+          <ModalReview
+            openModal={openReview}
+            setOpenModal={setOpenReview}
+            gameData={gameData}
+            getEmojiRating={getEmojiRating}
+            getGameReviews={getGameReviews}
+          />
+        )}
+        <div id={styles.container}>
+          <div id={styles.coverContainer}>
+            <img id={styles.cover} src={gameData.image} alt="" loading="lazy" />
+            <div id={styles.textBoxBlur}></div>
+            <div id={styles.blur}></div>
+            <div id={styles.dataContainer}>
+              <div id={styles.data}>
+                <div id={styles.leftContainer}>
+                  <div id={styles.gameBoxContainer}>
+                    <img
+                      id={styles.gameBox}
+                      src={gameData.image}
+                      alt={gameData.name}
+                    />
                   </div>
-                )}
-              </div>
-              <div id={styles.rightContainer}>
-                <div id={styles.descriptionBox}>
-                  <h3 id={styles.description}>
-                    {gameData.description.replaceAll("&amp;#10;", "")}
-                  </h3>
-                </div>
-                <div id={styles.statistics}>
-                  <CircularProgressBar {...props} />
-                  <h3>Playing Time: {gameData.playingtime} min</h3>
-                  <h3>
-                    {gameData.minplayers}-{gameData.maxplayers} Players
-                  </h3>
-                  <h3>Age: {gameData.minage}+</h3>
-                  <h3>
-                    Complexity:{" "}
-                    {Math.round(
-                      gameData.statistics.ratings.averageweight * 10
-                    ) / 10}
-                    /5
-                  </h3>
-                </div>
-                {user && (
-                  <div id={styles.actions}>
-                    <button
-                      id={styles.collectionButton}
-                      onClick={() => setOpenCollection(true)}
-                    >
-                      Add to Collection
-                    </button>
-                    <button
-                      id={styles.logButton}
-                      onClick={() => setOpenLog(true)}
-                    >
-                      Log Play
-                    </button>
-                    <button
-                      id={styles.reviewButton}
-                      onClick={() => setOpenReview(true)}
-                    >
-                      Write a Review
-                    </button>
+                  <div>
+                    <h1 id={styles.gameTitle}>
+                      {gameData.name.replaceAll("&#039;", "'")}
+                    </h1>
+                    <h1 id={styles.year}>{gameData.yearpublished}</h1>
                   </div>
-                )}
+                  {user && (
+                    <div id={styles.ratingBox}>
+                      <EmojiRating userRating={userRating} />
+                    </div>
+                  )}
+                </div>
+                <div id={styles.rightContainer}>
+                  <div id={styles.descriptionBox}>
+                    <h3 id={styles.description}>
+                      {gameData.description.replaceAll("&amp;#10;", "")}
+                    </h3>
+                  </div>
+                  <div id={styles.statistics}>
+                    <CircularProgressBar {...props} />
+                    <h3>Playing Time: {gameData.playingtime} min</h3>
+                    <h3>
+                      {gameData.minplayers}-{gameData.maxplayers} Players
+                    </h3>
+                    <h3>Age: {gameData.minage}+</h3>
+                    <h3>
+                      Complexity:{" "}
+                      {Math.round(
+                        gameData.statistics.ratings.averageweight * 10
+                      ) / 10}
+                      /5
+                    </h3>
+                  </div>
+                  {user && (
+                    <div id={styles.actions}>
+                      <button
+                        id={styles.collectionButton}
+                        onClick={() => setOpenCollection(true)}
+                      >
+                        Add to Collection
+                      </button>
+                      <button
+                        id={styles.logButton}
+                        onClick={() => setOpenLog(true)}
+                      >
+                        Log Play
+                      </button>
+                      <button
+                        id={styles.reviewButton}
+                        onClick={() => setOpenReview(true)}
+                      >
+                        Write a Review
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <div id={styles.bottomContainer}></div>
               </div>
-              <div id={styles.bottomContainer}></div>
+            </div>
+          </div>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div id={styles.bottomContainer}>
+              <GamePageLog userlogs={userGameLogs} />
+              <GamePageReview reviews={reviews} />
             </div>
           </div>
         </div>
-        <div
-          style={{ width: "100%", display: "flex", justifyContent: "center" }}
-        >
-          <div id={styles.bottomContainer}>
-            <GamePageLog userlogs={userGameLogs} />
-            <GamePageReview reviews={reviews} />
-          </div>
-        </div>
-      </div>
+      </>
     </>
   );
 };

@@ -14,7 +14,7 @@ const GameCard = ({ game, index }) => {
 
   const props = {
     percent: rating,
-    size: 70,
+    size: 60,
     speed: 300,
     colorSlice: color(),
     unit: "",

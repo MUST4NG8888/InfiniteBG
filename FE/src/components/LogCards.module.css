@@ -6,19 +6,20 @@
     gap: 80px;
     padding: 20px 20px 20px 40px;
     backdrop-filter: blur(17px);
-    border: 4px solid blue;
     border-radius: 50px;
-    /* background: linear-gradient(
-      180deg,
-      rgba(13, 13, 13, 0.8),
-      rgba(13, 13, 13, 0.4)
-    ); */
-    color: blue;
+    background: linear-gradient(
+      190deg,
+      #02eaa8,
+      #47DCD3 
+    );
+    color: whitesmoke;
     transition: 0.2s ease-out;
 }
 
 #box:hover {
   transform: scale(1.02);
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.127);
+
 }
 
 #playerContainer {

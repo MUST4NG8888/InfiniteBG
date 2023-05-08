@@ -36,4 +36,12 @@
     width: 550px;
 }
 
-.swiper-button-next { color: red; }
+
+
+@media screen and (max-width: 1024px) {
+ #title {
+    font-size: 60px;
+ }
+   
+   
+   }

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const getGameInUserCollection = async (id, gameData, setUserCollection) => {
+const getGameInUserCollection = async (id, gameData) => {
     const response = await axios.get(
       `${import.meta.env.VITE_BACKEND_URL}/api/vaults/${id}`,
       {
@@ -14,33 +14,33 @@ const getGameInUserCollection = async (id, gameData, setUserCollection) => {
       response.data.owned &&
       (await response.data.owned.find((game) => game.id == gameData.id))
     )
-      return setUserCollection("owned");
+      return "owned";
     if (
       response.data.favourites &&
       (await response.data.favourites.find((game) => game.id == gameData.id))
     )
-      return setUserCollection("favourites");
+      return "favourites";
     if (
       response.data.wantToPlay &&
       (await response.data.wantToPlay.find((game) => game.id == gameData.id))
     )
-      return setUserCollection("wantToPlay");
+      return "wantToPlay";
     if (
       response.data.wantToBuy &&
       (await response.data.wantToBuy.find((game) => game.id == gameData.id))
     )
-      return setUserCollection("wantToBuy");
+      return "wantToBuy";
     if (
       response.data.forTrade &&
       (await response.data.forTrade.find((game) => game.id == gameData.id))
     )
-      return setUserCollection("forTrade");
+      return "forTrade";
     if (
       response.data.wishList &&
       (await response.data.wishList.find((game) => game.id == gameData.id))
-    ) return setUserCollection("wishList");
+    ) return "wishList";
     
-      return setUserCollection(true);
+      return true;
   };
 
   export default getGameInUserCollection

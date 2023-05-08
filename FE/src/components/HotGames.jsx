@@ -6,12 +6,12 @@ import useRXjs from "../hooks/useRXjs";
 import { register } from "swiper/element/bundle";
 import InfinityLoading from "../assets/icons/infinityLoading";
 import { ReactComponent as Hot } from "../assets/icons/hot.svg";
-
+import useWindowSize from "../hooks/useWindowSize";
 
 const HotGames = () => {
   register();
 
-
+const size = useWindowSize()
   const hotGames = useRXjs($hotGames);
 
   return (
@@ -21,7 +21,7 @@ const HotGames = () => {
         {hotGames ? (
           <swiper-container
             id={styles.sliderContainer}
-            slides-per-view="4"
+            slides-per-view={size.width < 1024 ? 2 : 4}
             navigation="true"
             space-between="20"
             mousewheel="true"
