@@ -6,6 +6,7 @@ const getGameData = async (id) => {
       `${import.meta.env.VITE_BACKEND_URL}/api/games/${id}`
     );
     
+    console.log(response.data)
     return {...response.data[0]};
   };
 

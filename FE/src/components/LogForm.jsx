@@ -7,7 +7,6 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import AddUser from "../assets/icons/AddUser.jsx";
-import DeleteUser from "../assets/icons/DeleteUser";
 import { DateTime } from "luxon";
 
 const LogForm = ({ submitHandler, gameData }) => {

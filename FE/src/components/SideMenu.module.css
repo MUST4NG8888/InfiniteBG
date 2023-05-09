@@ -13,14 +13,12 @@
     rgba(244, 244, 244, 0.9)
   );
   border-radius: 50px;
- 
 }
-
 
 #linkContainer {
   display: flex;
   flex-direction: column;
-  gap: 10vh;
+  gap: 80px;
 }
 
 #avatarContainer {
@@ -40,7 +38,7 @@
   box-shadow: 0px 0px 4px 4px rgba(0, 81, 255, 0.457);
 }
 
-#container:hover #avatarContainer{
+#container:hover #avatarContainer {
   top: 30px;
 }
 
@@ -92,3 +90,50 @@
 #container:hover #avatarContainer {
   top: 30px;
 }
+
+.games.active {
+  color: #4771DC;
+}
+
+
+.games {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  text-decoration: none;
+  transition: 0.2s ease-out;
+  color: rgba(128, 128, 128, 0.500);
+}
+
+.buttonHover {
+  position: absolute;
+  z-index: -1;
+  width: 0px;
+  height: 0px;
+  border-radius: 50%;
+  transition: 0.2s ease-out;
+}
+
+
+.games:hover .buttonHover{
+  width: 80px;
+  height: 80px;
+  background-color: rgba(189, 189, 189, 0.227);
+  backdrop-filter: blur(35px);
+}
+
+.games:hover {
+  color: #4771DC
+}
+
+
+.buttonBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+

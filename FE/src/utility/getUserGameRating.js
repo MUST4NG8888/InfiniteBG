@@ -12,7 +12,7 @@ const getUserGameRating = async (userId, gameId) => {
 
     const userRating = response.data.filter(rating => rating.gameId === gameId)[0]
    
-    if (userRating) return  (Math.round(response.data.filter(rating => rating.gameId === gameId)[0].rating))
+    if (userRating) return  (response.data.filter(rating => rating.gameId === gameId)[0].rating)
       return null
   };
 

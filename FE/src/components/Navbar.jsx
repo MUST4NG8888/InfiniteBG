@@ -6,8 +6,7 @@ import { ReactComponent as Google } from "../assets/icons/Google__G.svg";
 import styles from "../components/Navbar.module.css";
 import useScrollDirection from "../hooks/useScrollDirection";
 import SideMenu from "./SideMenu";
-
-
+import { useEffect, useState } from "react";
 
 const googleURL = "https://accounts.google.com/o/oauth2/v2/auth?";
 const scope = import.meta.env.VITE_SCOPE;
@@ -29,17 +28,19 @@ const Navbar = () => {
         }`}
       >
         <nav className={styles.header}>
-          <div></div>
+          <div className={styles.box}></div>
           <Link to="/">
-            <Logo id={styles.logo} />
+            <Logo className={styles.box} id={styles.logo} />
           </Link>
-          {!user ? (
-            <Link id={styles.login} to={`${url}`}>
-              Login with <Google id={styles.google} />
-            </Link>
-          ) : (
-            <div></div>
-          )}
+          <div className={styles.box}>
+            {!user ? (
+              <Link id={styles.login} to={`${url}`}>
+                Login with <Google id={styles.google} />
+              </Link>
+            ) : (
+              <div className={styles.box}></div>
+            )}
+          </div>
         </nav>
         <SideMenu />
       </div>

@@ -21,9 +21,9 @@ const size = useWindowSize()
         {hotGames ? (
           <swiper-container
             id={styles.sliderContainer}
-            slides-per-view={size.width < 1024 ? 2 : 4}
+            slides-per-view={size.width < 1100 ? 2 : 4}
             navigation="true"
-            space-between="20"
+            space-between="35"
             mousewheel="true"
             speed="500"
             parallax="true"

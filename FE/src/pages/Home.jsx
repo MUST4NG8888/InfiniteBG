@@ -23,8 +23,9 @@ useEffect(() => {
   return (
     <>
       <div id={styles.wrapper}>
+        <div style={{  width: "90%"}}>
         <HotGames games={hotGames} />
-        <main></main>
+        </div>
       </div>
     </>
   );

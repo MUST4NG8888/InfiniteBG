@@ -8,6 +8,9 @@ import { useLottie } from "lottie-react";
 import hamburger from "../assets/icons/menuV3.json";
 import React, { useState, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
+import GameIcon from "../assets/icons/Games.svg";
+import PlayIcon from "../assets/icons/Play.svg";
+import DisqusIcon from "../assets/icons/Disqus.svg";
 import "./SideMenuAnimation.css";
 
 const SideMenu = () => {
@@ -47,18 +50,64 @@ const SideMenu = () => {
         <div id={styles.container} ref={nodeRef} onMouseLeave={onOut}>
           <div id={styles.linkContainer}>
             <div></div>
-            <NavLink to="events">Events</NavLink>
-            <NavLink to="plays">Games</NavLink>
-            <NavLink to="plays">Disqus</NavLink>
+            <NavLink
+              className={styles.games}
+              style={({ isActive, isPending }) => {
+                return {
+                  color: isActive && "#4771DC",
+                };
+              }}
+              to="games"
+            >
+              <div className={styles.buttonHover}></div>
+              <div className={styles.buttonBox}>
+                <img src={GameIcon} alt="" />
+                <h4>Games</h4>
+              </div>
+            </NavLink>
+            <NavLink
+              className={styles.games}
+              style={({ isActive, isPending }) => {
+                return {
+                  color: isActive && "#4771DC",
+                };
+              }}
+              to="plays"
+            >
+              <div className={styles.buttonHover}></div>
+              <div className={styles.buttonBox}>
+                <img src={PlayIcon} alt="" />
+                <h4>Plays</h4>
+              </div>
+            </NavLink>
+            <NavLink
+              className={styles.games}
+              style={({ isActive, isPending }) => {
+                return {
+                  color: isActive && "#4771DC",
+                };
+              }}
+              to="events"
+            >
+              <div className={styles.buttonHover}></div>
+              <div className={styles.buttonBox}>
+                <img src={DisqusIcon} alt="" />
+                <h4>Events</h4>
+              </div>
+            </NavLink>
           </div>
           {user ? (
-            <Logout onClick={logout} id={styles.logout} />
+            <Logout
+              onClick={() =>{logout(), window.location.reload();
+              }}
+              id={styles.logout}
+            />
           ) : (
             <MiniLogo id={styles.sidelogomini} />
           )}
         </div>
       </CSSTransition>
-      {user ? (
+      { user ? (
         <NavLink to="profile">
           <div id={styles.avatarContainer} onMouseEnter={onHover}>
             <img id={styles.avatar} src={user.avatar} alt="" />

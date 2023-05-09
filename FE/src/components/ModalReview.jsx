@@ -6,6 +6,8 @@ import Grow from "@mui/material/Grow";
 import axios from "axios";
 import useRXjs from "../hooks/useRXjs";
 import { $user } from "../states/user";
+import TextField from "@mui/material/TextField";
+import EmojiRating from "./EmojiRating";
 
 const ModalReview = ({
   openModal,
@@ -83,25 +85,40 @@ const ModalReview = ({
           <div id={styles.imgContainer}>
             <img id={styles.gameImg} src={gameData.thumbnail} alt="" />
           </div>
-          <input
-            type="text"
-            placeholder="title"
+          <TextField
+            sx={{ marginTop: "10px", width: "200px" }}
+            id="standard-basic"
+            label="Title"
+            variant="standard"
+            value={review.reviewTitle}
             onChange={(newValue) =>
-              setReview({ ...review, title: newValue.target.value })
+              setReview({ ...review, reviewTitle: newValue.target.value })
             }
           />
-          <input
+
+          <TextField
+            sx={{ marginTop: "20px", width: "200px" }}
+            name="rating"
+            label="Rating"
+            variant="standard"
+            inputProps={{ step: 0.5, min: 1, max: 10 }}
             type="number"
-            placeholder="rating"
-            min={0}
-            max={10}
+            value={review.rating}
             onChange={(newValue) =>
               setReview({ ...review, rating: newValue.target.valueAsNumber })
             }
           />
-          <input
-            type="text"
-            placeholder="Review Text"
+          <div style={{ marginTop: "20px"}}>
+          <EmojiRating userRating={review.rating} />
+          </div>
+          <TextField
+            sx={{ marginTop: "20px" }}
+            id="standard-basic"
+            label="Review"
+            variant="filled"
+            multiline
+            rows={8}
+            value={review.reviews}
             onChange={(newValue) =>
               setReview({ ...review, review: newValue.target.value })
             }

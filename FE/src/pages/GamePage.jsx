@@ -13,8 +13,9 @@ import GamePageReview from "../components/GamePageReview";
 import GamePageLog from "../components/GamePageLog";
 import getGameReviews from "../utility/getGameReviews";
 import getUserGameLogs from "../utility/getUserGameLogs";
-import getEmojiRating from "../utility/getEmojiRating";
 import InfinityLoading from "../assets/icons/infinityLoading";
+import getUserGameRating from "../utility/getUserGameRating";
+
 
 const GamePage = () => {
   const user = useRXjs($user);
@@ -29,11 +30,15 @@ const GamePage = () => {
   const [openReview, setOpenReview] = useState(false);
 
   const dataFetch = async () => {
+    console.log("START")
     setLoading(true);
-    user && setUserRating(await getEmojiRating(user.id, gameData.id));
-    user && setReviews(await getGameReviews(gameData.id));
     user && setUserGameLogs(await getUserGameLogs(user.id, gameData.id));
-    user && setUserCollection(await getGameInUserCollection(user.id, gameData));
+    console.log("USERCOLLECTION START")
+    user && setUserCollection(await getGameInUserCollection(user.id, gameData.id));
+    console.log("USERCOLLECTION END")
+    user && setUserRating(await getUserGameRating(user.id, gameData.id));
+    user && setReviews(await getGameReviews(gameData.id));
+    console.log("END")
     setLoading(false);
   };
 
@@ -71,7 +76,7 @@ const GamePage = () => {
         <div
           style={{
             background: "rgba(239, 239, 239, 0.7)",
-            width: "100vw",
+            width: "100%",
             height: "100%",
             backdropFilter: "blur(17px)",
             position: "absolute",
@@ -103,7 +108,6 @@ const GamePage = () => {
             openModal={openReview}
             setOpenModal={setOpenReview}
             gameData={gameData}
-            getEmojiRating={getEmojiRating}
             getGameReviews={getGameReviews}
           />
         )}

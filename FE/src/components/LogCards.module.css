@@ -6,7 +6,7 @@
     gap: 80px;
     padding: 20px 20px 20px 40px;
     backdrop-filter: blur(17px);
-    border-radius: 50px;
+    border-radius: 1000px;
     background: linear-gradient(
       190deg,
       #02eaa8,

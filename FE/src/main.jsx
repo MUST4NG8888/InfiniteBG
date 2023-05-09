@@ -11,6 +11,7 @@ import Profile from "./pages/Profile";
 import Plays from "./pages/Plays";
 import Events from "./pages/Events";
 import GamePage from "./pages/GamePage";
+import Games from "./pages/Games";
 import getGameData from "./utility/getGameData";
 import '@smastrom/react-rating/style.css'
 
@@ -33,7 +34,8 @@ const router = createBrowserRouter([
           { path: "plays", element: <Plays /> }
         ],
       },
-      { path: "events", element: <Events /> },
+      { path: "events", element: <Events/> },
+      { path: "games", element: <Games/> },
       { path: "boardgame/:id/:name", element: <GamePage />, loader: ({params})=>getGameData(params.id)},
       { path: "googleauth", element: <AuthPage /> },
       { path: "login", element: <LoginPage /> },
