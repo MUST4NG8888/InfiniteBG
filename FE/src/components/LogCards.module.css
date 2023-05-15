@@ -1,31 +1,6 @@
-#box {
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    width: 100%;
-    max-width: 800px;
-    margin-top: 30px;
-    gap: 80px;
-    padding: 20px 20px 20px 40px;
-    backdrop-filter: blur(17px);
-    border-radius: 17px;
-    background: linear-gradient(
-      190deg,
-      #02eaa8,
-      #47DCD3 
-    );
-    color: whitesmoke;
-    transition: 0.2s ease-out;
-}
-
-#box:hover {
-  transform: scale(1.02);
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.127);
-
-}
-
-#playerContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px
+#nameColumn {
+color: rgb(35, 35, 35);
+width: 25%;
+font-family: Paytone One;
+background: linear-gradient(45deg, #47dcd3, #02eaa8);
 }

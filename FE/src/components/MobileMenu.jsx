@@ -80,10 +80,9 @@ const MobileMenu = () => {
         </div>
         <div id={styles.rightBox}className={styles.box}>
           {user ? (
-            <Logout
+            <Logout id={styles.logout}
               onClick={() =>{logout();
               }}
-              id={styles.logout}
             />
           ) : (
             <div></div>
