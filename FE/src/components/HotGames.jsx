@@ -11,17 +11,19 @@ import useWindowSize from "../hooks/useWindowSize";
 const HotGames = () => {
   register();
 
-const size = useWindowSize()
+  const size = useWindowSize();
   const hotGames = useRXjs($hotGames);
 
   return (
     <div id={styles.container}>
-      <h1 id={styles.title}>HOTNEESSS <Hot/></h1>
+      <h1 id={styles.title}>
+        HOTNEESSS <Hot />
+      </h1>
       <div id={styles.box}>
         {hotGames ? (
           <swiper-container
             id={styles.sliderContainer}
-            slides-per-view={size.width < 1100 ? 2 : 4}
+            slides-per-view={size.width < 768 ? 1 : size.width < 1100 ? 2 : 4}
             navigation="true"
             space-between="35"
             mousewheel="true"
@@ -38,7 +40,7 @@ const size = useWindowSize()
                     .replaceAll(":", "")
                     .toLowerCase()}`}
                 >
-                  <GameCard  game={game} index={index}/>
+                  <GameCard game={game} index={index} />
                 </Link>
               </swiper-slide>
             ))}

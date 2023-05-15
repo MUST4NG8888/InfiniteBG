@@ -98,7 +98,7 @@ const SideMenu = () => {
           </div>
           {user ? (
             <Logout
-              onClick={() =>{logout(), window.location.reload();
+              onClick={() =>{logout();
               }}
               id={styles.logout}
             />

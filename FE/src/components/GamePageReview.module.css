@@ -13,5 +13,11 @@
     background: linear-gradient(45deg,#4771DC, #621080);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    width: 550px;
+}
+
+#box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

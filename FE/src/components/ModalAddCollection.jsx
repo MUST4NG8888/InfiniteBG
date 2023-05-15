@@ -21,9 +21,6 @@ const ModalCollection = ({
   const user = useRXjs($user);
   const [open, setOpen] = useState(false);
   const [radioValue, setRadioValue] = useState();
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const toastMessage =
     radioValue === "none"
@@ -51,14 +48,13 @@ const ModalCollection = ({
               <h1>Add to your VAULT</h1>
               <h3>{gameData.name}</h3>
               <div id={styles.imgContainer}>
-              <img id={styles.gameImg} src={gameData.thumbnail} alt="" />
+                <img id={styles.gameImg} src={gameData.thumbnail} alt="" />
               </div>
               <FormControl>
                 <RadioGroup
                   row={true}
-                  aria-labelledby="demo-radio-buttons-group-label"
+                  sx={{ justifyContent: "center", alignItems: "center" }}
                   defaultValue={radioValue ? radioValue : userCollection}
-                  name="radio-buttons-group"
                 >
                   <FormControlLabel
                     value="none"
@@ -126,25 +122,25 @@ const ModalCollection = ({
           )}
         </div>
       </Modal>
-        <Snackbar
-          sx={{ marginBottom: "170px" }}
-          ContentProps={{
-            sx: {
-              fontSize: "20px",
-              borderRadius: "600px",
-              backdropFilter: "blur(8px)",
-              background: "rgb(255, 0, 76)",
-              padding: "20px",
-              textAlign: "center",
-            },
-          }}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-          open={open}
-          onClose={handleClose}
-          autoHideDuration={2000}
-          TransitionComponent={Grow}
-          message={toastMessage}
-        />
+      <Snackbar
+        sx={{ marginBottom: "170px" }}
+        ContentProps={{
+          sx: {
+            fontSize: "20px",
+            borderRadius: "600px",
+            backdropFilter: "blur(8px)",
+            background: "rgb(255, 0, 76)",
+            padding: "20px",
+            textAlign: "center",
+          },
+        }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={open}
+        onClose={() => setOpen(false)}
+        autoHideDuration={2000}
+        TransitionComponent={Grow}
+        message={toastMessage}
+      />
     </>
   );
 };

@@ -1,12 +1,14 @@
 #box {
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: space-between;
     margin-top: 30px;
-    gap: 80px;
-    padding: 20px 20px 20px 40px;
+    width: 100%;
+    max-width: 800px;
+    gap: 40px;
+    padding: 20px 40px 20px 40px;
     backdrop-filter: blur(17px);
-    border-radius: 1000px;
+    border-radius: 17px;
     background: linear-gradient(
       180deg,
       rgba(13, 13, 13, 0.8),
@@ -14,6 +16,26 @@
     );
     color: whitesmoke;
     transition: 0.2s ease-out;
+}
+#userBox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20%;
+  transition: 0.2s ease-out ;
+}
+
+#userBox:hover{
+  transform: scale(1.08);
+
+}
+
+
+
+#descirptionBox {
+  width: 100%;
+  display: flex;
+  justify-content: start;
 }
 
 #box:hover {

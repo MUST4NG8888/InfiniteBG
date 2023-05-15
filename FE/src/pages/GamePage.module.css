@@ -1,9 +1,10 @@
 #container {
- min-height: 2200px;
+  min-height: 2200px;
 }
-
 #coverContainer {
   position: relative;
+  display: flex;
+  justify-content: center;
   width: 100%;
   height: 600px;
 }
@@ -35,8 +36,9 @@
 #dataContainer {
   display: flex;
   justify-content: center;
-  padding: 80px 120px 80px 120px;
+  align-items: center;
   top: 0;
+  padding: 0px 120px 0px 120px;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -44,10 +46,18 @@
 
 #data {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
   max-width: 1280px;
-  gap: 80px;
+  height: 100%;
+  padding: 20px 0 20px 0;
+}
+
+#columnWrapper {
+  display: flex;
+  align-items: start;
+  width: 100%;
+  gap: 20px;
 }
 
 #leftContainer {
@@ -57,6 +67,7 @@
   flex-direction: column;
   align-items: stretch;
   width: 40%;
+  flex: 1;
 }
 
 #rightContainer {
@@ -64,6 +75,13 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: start;
+}
+
+#dataBottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
 }
 
@@ -141,8 +159,8 @@
 }
 
 #actions {
-  margin-top: 5px;
   display: flex;
+  flex: 1;
   justify-content: space-evenly;
   width: 100%;
   align-items: center;
@@ -205,13 +223,12 @@
 }
 
 #ratingBox {
-  position: absolute;
-  bottom: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 10px;
   width: auto;
+  height: 60px;
   backdrop-filter: blur(17px);
   border-radius: 50px;
   background: linear-gradient(
@@ -228,13 +245,151 @@
   flex-direction: column;
   align-items: center;
   max-width: 1280px;
-  padding:80px 0px 0px 0px;
+  padding: 80px 0px 0px 0px;
 }
 
-@media screen and (max-width: 1024px) {
-  #data {
-   gap: 10px;
+@media screen and (max-width: 768px) {
+  #dataContainer {
+    padding: 0px 40px 0px 40px;
   }
- 
- 
- }
+
+  #data {
+    gap: 20px;
+  }
+
+  #gameTitle {
+    width: 320px;
+    margin-top: 20px;
+    font-size: 24px;
+    color: white;
+    text-align: center;
+  }
+
+  #year {
+    text-align: center;
+    font-size: 24px;
+    color: #d9d9d9;
+  }
+
+  #coverContainer {
+    height: 950px;
+  }
+
+  #columnWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #leftContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+    flex: 1;
+  }
+
+#rightContainer {
+  align-items: center;
+  justify-content: center;  
+}
+
+  #description {
+    font-size: 16px;
+  }
+
+  #statistics {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  #dataBottom {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+
+  #ratingBox {
+    margin-top: 30px;
+  height: 50px;
+  padding: 8px;
+  }
+
+#actions {
+  padding: 0;
+}
+
+
+
+#collectionButton{
+  font-size: 14px;
+  padding: 10px
+}
+
+#logButton{
+  font-size: 14px;
+  padding: 10px
+
+}
+
+#reviewButton{
+  font-size: 14px;
+  padding: 10px
+
+}
+
+}
+
+@media screen and (max-width: 640px) {
+  #dataContainer{
+    padding: 0 80px 0 80px;
+  }
+  
+  #coverContainer {
+    height: 900px;
+  }
+  
+  #description {
+    font-size: 14px;
+  }
+
+  #statistics {
+    margin-top: 10px;
+    font-size: 10px;
+    max-width: 100%;
+  }
+
+
+  #collectionButton{
+    font-size: 12px;
+
+  }
+  
+  #logButton{
+    font-size: 12px;
+
+  
+  }
+
+#actions {
+  padding: 20px 0 20px 0;
+}
+
+  
+  #reviewButton{
+    font-size: 12px;
+    
+  }
+  
+  #descriptionBox {
+    max-width: 100%;
+  }
+
+  #ratingBox {
+  margin-top: 5px;
+  }
+
+
+}

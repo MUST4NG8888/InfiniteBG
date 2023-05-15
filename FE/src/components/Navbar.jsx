@@ -6,7 +6,9 @@ import { ReactComponent as Google } from "../assets/icons/Google__G.svg";
 import styles from "../components/Navbar.module.css";
 import useScrollDirection from "../hooks/useScrollDirection";
 import SideMenu from "./SideMenu";
-import { useEffect, useState } from "react";
+import useDeviceDetect from "../hooks/useDeviceDetect";
+import useWindowSize from "../hooks/useWindowSize";
+import MobileMenu from "./MobileMenu";
 
 const googleURL = "https://accounts.google.com/o/oauth2/v2/auth?";
 const scope = import.meta.env.VITE_SCOPE;
@@ -17,9 +19,10 @@ const redirect_uri = import.meta.env.VITE_REDIRECT_URI;
 const url = `${googleURL}response_type=${response_type}&scope=${scope}&client_id=${client_id}&redirect_uri=${redirect_uri}&prompt=consent`;
 
 const Navbar = () => {
+  const { isMobile } = useDeviceDetect();
+  const size = useWindowSize();
   const user = useRXjs($user);
   const scrollDirection = useScrollDirection();
-
   return (
     <>
       <div
@@ -42,7 +45,7 @@ const Navbar = () => {
             )}
           </div>
         </nav>
-        <SideMenu />
+        {size.width > 1024 && <SideMenu />}
       </div>
     </>
   );

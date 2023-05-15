@@ -15,9 +15,10 @@ import getGameReviews from "../utility/getGameReviews";
 import getUserGameLogs from "../utility/getUserGameLogs";
 import InfinityLoading from "../assets/icons/infinityLoading";
 import getUserGameRating from "../utility/getUserGameRating";
-
+import useWindowSize from "../hooks/useWindowSize";
 
 const GamePage = () => {
+  const size = useWindowSize()
   const user = useRXjs($user);
   const gameData = useLoaderData();
   const [loading, setLoading] = useState(false);
@@ -30,23 +31,21 @@ const GamePage = () => {
   const [openReview, setOpenReview] = useState(false);
 
   const dataFetch = async () => {
-    console.log("START")
+    document.body.classList.add("no-scroll");
     setLoading(true);
     user && setUserGameLogs(await getUserGameLogs(user.id, gameData.id));
-    console.log("USERCOLLECTION START")
-    user && setUserCollection(await getGameInUserCollection(user.id, gameData.id));
-    console.log("USERCOLLECTION END")
     user && setUserRating(await getUserGameRating(user.id, gameData.id));
     user && setReviews(await getGameReviews(gameData.id));
-    console.log("END")
+    document.body.classList.remove("no-scroll");
     setLoading(false);
+    user &&
+      setUserCollection(await getGameInUserCollection(user.id, gameData.id));
   };
 
   useEffect(() => {
     dataFetch();
   }, []);
 
-  
   const rating = Math.round(gameData.statistics.ratings.average * 10);
   const color = () => {
     if (rating >= 80) return "#4771DC";
@@ -58,7 +57,7 @@ const GamePage = () => {
 
   const props = {
     percent: rating,
-    size: 80,
+    size: size.width < 768 ? 60 : size.width < 1100 ? 80 : 80,
     speed: 300,
     colorSlice: color(),
     unit: "",
@@ -76,6 +75,7 @@ const GamePage = () => {
         <div
           style={{
             background: "rgba(239, 239, 239, 0.7)",
+            overflow: "none",
             width: "100%",
             height: "100%",
             backdropFilter: "blur(17px)",
@@ -101,14 +101,14 @@ const GamePage = () => {
           openModal={openLog}
           setOpenModal={setOpenLog}
           gameData={gameData}
-          getUserGameLogs={getUserGameLogs}
+          setUserGameLogs={setUserGameLogs}
         />
         {user && (
           <ModalReview
             openModal={openReview}
             setOpenModal={setOpenReview}
             gameData={gameData}
-            getGameReviews={getGameReviews}
+            setReviews={setReviews}
           />
         )}
         <div id={styles.container}>
@@ -118,6 +118,7 @@ const GamePage = () => {
             <div id={styles.blur}></div>
             <div id={styles.dataContainer}>
               <div id={styles.data}>
+                <div id={styles.columnWrapper}>
                 <div id={styles.leftContainer}>
                   <div id={styles.gameBoxContainer}>
                     <img
@@ -132,11 +133,6 @@ const GamePage = () => {
                     </h1>
                     <h1 id={styles.year}>{gameData.yearpublished}</h1>
                   </div>
-                  {user && (
-                    <div id={styles.ratingBox}>
-                      <EmojiRating userRating={userRating} />
-                    </div>
-                  )}
                 </div>
                 <div id={styles.rightContainer}>
                   <div id={styles.descriptionBox}>
@@ -159,6 +155,14 @@ const GamePage = () => {
                       /5
                     </h3>
                   </div>
+                </div>
+                </div>
+                <div id={styles.dataBottom}>
+                {user && (
+                    <div id={styles.ratingBox}>
+                      <EmojiRating userRating={userRating} />
+                    </div>
+                  )}
                   {user && (
                     <div id={styles.actions}>
                       <button
@@ -182,7 +186,6 @@ const GamePage = () => {
                     </div>
                   )}
                 </div>
-                <div id={styles.bottomContainer}></div>
               </div>
             </div>
           </div>

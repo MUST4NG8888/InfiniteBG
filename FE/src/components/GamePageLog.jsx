@@ -5,7 +5,7 @@ const GamePageLog = ({ userlogs }) => {
   return (
     <div id={styles.container}>
       <h1 id={styles.title}>Play Logs</h1>
-      <div style={{ padding: "0 20% 0 20%" }}>
+      <div>
         {userlogs &&
           userlogs
             .sort((a, b) => new Date(b.date) - new Date(a.date))

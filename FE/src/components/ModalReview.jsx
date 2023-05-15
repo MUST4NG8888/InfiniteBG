@@ -8,13 +8,12 @@ import useRXjs from "../hooks/useRXjs";
 import { $user } from "../states/user";
 import TextField from "@mui/material/TextField";
 import EmojiRating from "./EmojiRating";
-
+import getGameReviews from "../utility/getGameReviews";
 const ModalReview = ({
   openModal,
   setOpenModal,
   gameData,
-  getEmojiRating,
-  getGameReviews,
+  setReviews
 }) => {
   const user = useRXjs($user);
   const [open, setOpen] = useState(false);
@@ -59,8 +58,7 @@ const ModalReview = ({
         if (error) setOpenModal(false), setWarning(true);
       });
     if (response.status === 200) setOpen(true);
-    getEmojiRating();
-    getGameReviews(gameData.id);
+    setReviews(await getGameReviews(gameData.id))
     setOpenModal(false);
   };
 
