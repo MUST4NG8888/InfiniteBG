@@ -2,7 +2,7 @@ import axios from "axios";
 import { BehaviorSubject } from "rxjs";
 import jwt_decode from 'jwt-decode'
 
-const client = axios.create({ baseURL: "http://localhost:8080" });
+const client = axios.create({ baseURL: import.meta.env.VITE_BACKEND_URL });
 
 const request = async (method, path, payload) => {
   try {
