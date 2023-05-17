@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "node dist/server.js",
     "test": "tsc && jest",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\""
   },
