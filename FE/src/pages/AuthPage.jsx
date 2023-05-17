@@ -14,6 +14,7 @@ const AuthPage = () => {
       onSuccess: () => navigate(-2),
       onError: () => navigate("/googleauth")
     });
+    console.log("LEFUTOTT")
   }, [])
 
   return <div id={styles.container}><InfinityLoading/></div>
