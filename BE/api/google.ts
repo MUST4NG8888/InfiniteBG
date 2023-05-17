@@ -29,7 +29,6 @@ export const getIdToken = async (code: string): Promise<string | null> => {
     }
     return result.data.id_token;
   } catch (error) {
-    console.log(error)
     console.log("getIDToken error");
     return null;
   }
