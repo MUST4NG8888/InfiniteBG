@@ -11,7 +11,7 @@ const AuthPage = () => {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const code = urlSearchParams.get("code");
     if (code) login(code, {
-      onSuccess: () => {navigate(-2), window.location.reload()},
+      onSuccess: () => {location.reload(), navigate(-2)},
       onError: () => navigate("/googleauth")
     });
   }, [])
