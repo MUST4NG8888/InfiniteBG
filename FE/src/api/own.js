@@ -2,45 +2,8 @@ import axios from "axios";
 import { BehaviorSubject } from "rxjs";
 import jwt_decode from 'jwt-decode'
 
-const client = axios.create({ baseURL: import.meta.env.VITE_BACKEND_URL });
+const client = axios.create({ baseURL: `${import.meta.env.VITE_BACKEND_URL}` });
 
-const request = async (method, path, payload) => {
-  try {
-    client.request({
-      method,
-      url: path,
-      data: payload,
-      headers: {
-        Authorization: `Bearer: ${localStorage.getItem("token")}`,
-      },
-    });
-    const response = await client.request({
-      method,
-      url: path,
-      data: payload,
-      headers: {
-        Authorization: `Bearer: ${localStorage.getItem("token")}`,
-      },
-    });
-    return {
-      data: response.data,
-      status: response.status,
-    };
-  } catch (error) {
-    const response = error.response;
-    if (response?.status === 401) endSession();
-    if (response) {
-      return {
-        data: response.data,
-        status: response.status,
-      };
-    }
-    return {
-      data: null,
-      status: 0,
-    };
-  }
-};
 
 export const $token = new BehaviorSubject(localStorage.getItem("token"));
 export const endSession = () => {
