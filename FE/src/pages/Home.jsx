@@ -1,30 +1,26 @@
 import styles from "./Home.module.css";
 import HotGames from "../components/HotGames";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { $hotGames, setGames } from "../states/hotGames";
-import useRXjs from "../hooks/useRXjs.js"
-
+import useRXjs from "../hooks/useRXjs.js";
+import getHotGames from "../utility/getHotGames";
 
 const Home = () => {
-  
   const hotGames = useRXjs($hotGames);
 
+  const getData = async () => {
+    setGames(await getHotGames());
+  };
 
-useEffect(() => {
-    const getHotGames = async () => {
-      const response = await axios.get(`http://localhost:8080/api/games/hot`);
-      setGames(response.data);
-    };
-    getHotGames();
+  useEffect(() => {
+    getData();
   }, []);
-
 
   return (
     <>
       <div id={styles.wrapper}>
-        <div style={{  width: "90%"}}>
-        <HotGames games={hotGames} />
+        <div style={{ width: "90%" }}>
+          <HotGames games={hotGames} />
         </div>
       </div>
     </>
