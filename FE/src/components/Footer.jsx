@@ -1,4 +1,4 @@
-import {ReactComponent as Logo} from "../assets/icons/miniLogo.svg";
+import {ReactComponent as Logo} from "../assets/icons/MiniLogo.svg";
 
 const Footer = () => {
   return (
