@@ -35,7 +35,7 @@ const GamePage = () => {
     setLoading(true);
     user && setUserGameLogs(await getUserGameLogs(user.id, gameData.id));
     user && setUserRating(await getUserGameRating(user.id, gameData.id));
-    user && setReviews(await getGameReviews(gameData.id));
+    setReviews(await getGameReviews(gameData.id));
     document.body.classList.remove("no-scroll");
     setLoading(false);
     user &&
