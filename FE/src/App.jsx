@@ -8,6 +8,7 @@ import useDeviceDetect from "./hooks/useDeviceDetect";
 import useWindowSize from "./hooks/useWindowSize";
 import MobileMenu from "./components/MobileMenu";
 
+
 import "./App.css";
 
 function App() {

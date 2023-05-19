@@ -8,7 +8,6 @@ import useScrollDirection from "../hooks/useScrollDirection";
 import SideMenu from "./SideMenu";
 import useDeviceDetect from "../hooks/useDeviceDetect";
 import useWindowSize from "../hooks/useWindowSize";
-import MobileMenu from "./MobileMenu";
 
 const googleURL = "https://accounts.google.com/o/oauth2/v2/auth?";
 const scope = import.meta.env.VITE_SCOPE;
@@ -23,6 +22,7 @@ const Navbar = () => {
   const size = useWindowSize();
   const user = useRXjs($user);
   const scrollDirection = useScrollDirection();
+
   return (
     <>
       <div
@@ -37,7 +37,11 @@ const Navbar = () => {
           </Link>
           <div className={styles.box}>
             {!user ? (
-              <Link id={styles.login} to={`${url}`}>
+              <Link
+                onClick={() => backToUrl(desiredString)}
+                id={styles.login}
+                to={`${url}`}
+              >
                 Login with <Google id={styles.google} />
               </Link>
             ) : (
